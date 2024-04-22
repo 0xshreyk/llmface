@@ -8,7 +8,7 @@ export default class Sessions {
         this.cache = {};
         this.charset = charset;
     }
-    async addSession(username: string) : Promise<any> {
+    async addSession(username: string) : Promise<{sid : String}> {
         const sid: string = await this.generate_id(); // Generate unique session ID
         this.cache[sid] = { username }; // Add a new session to the cache
         return {
