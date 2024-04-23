@@ -15,7 +15,12 @@ const PORT: number = Number(process.env.PORT) || 8080;
 const Sessions_: Sessions = new Sessions(String(process.env.CHARSET));
 
 
-
+async function checkNulls(arr: Array<any>): Promise<boolean> {
+    arr.forEach(element => {
+        if (element === (null || "" || undefined || 0)) return false;
+    });
+    return true;
+}
 
 app.use(express.json());
 app.use(cors({
@@ -34,25 +39,43 @@ app.get('/api/health', (req: Request, res: Response, next: NextFunction) => {
 
 app.post('/api/create/user', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { username, password, email, phone, age, gender } = req.body;
+        const username: string = req.body.username.toString();
+        const password: string = req.body.password.toString();
+        const email: string = req.body.email.toString();
+        const phone: number = req.body.phone;
+        const age: number = req.body.age;
+        const gender: string = req.body.gender.toString();
         const existingUser: any = await Users.findOne({ 'creds.username': username });
+
+
         console.log(username);
-        
+        console.log(password)
+        console.log(age);
+        console.log(email);
+
+        console.log(gender);
+
+
+
+        console.log(phone);
+
+
         if (existingUser) {
             res.status(400).json({
                 error: 'User already exists',
             });
         } else {
+
             const user = new Users({
                 creds: {
-                    username : username,
-                    password : password,
+                    username: username,
+                    password: password,
                 },
                 data: {
-                    email : email,
-                    phone : phone,
-                    age : age,
-                    gender : gender,
+                    email: email,
+                    phone: phone,
+                    age: age,
+                    gender: gender,
                 },
             });
 
@@ -129,8 +152,4 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
 
 server.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
-})
-
-process.on('SIGINT', async function () {
-    await mongoose.disconnect();
 })

@@ -7,6 +7,8 @@ const Page = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const phoneNumberRef = useRef<HTMLInputElement>(null);
   const genderRef = useRef<HTMLSelectElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
+
   const [notification, setNotification] = useState({
     display : false,
     type : '',
@@ -30,6 +32,7 @@ const Page = () => {
         <h2 className='font-bold'>General</h2>
         <input type="email" name="email" id="email" placeholder='email' ref={emailRef} className='px-4 py-2 text-sm border' /><br />
         <input type="number" name="number" id="number" placeholder='phone number' ref={phoneNumberRef} className='px-4 py-2 text-sm border' /><br />
+        <input type="number" name="age" id="age" placeholder='age' ref={ageRef} className='px-4 py-2 text-sm border' /><br />
         <span className='font-bold'>Gender</span>
         <select name="gender" id="gender" ref={genderRef}>
           <option value="male">Male</option>
@@ -44,26 +47,27 @@ const Page = () => {
             const email : string = emailRef.current?.value || '';
             const phoneNumber : number = Number(phoneNumberRef.current?.value || '');
             const gender : string = genderRef.current?.value || '';
+            const age : number = Number(ageRef.current?.value || 0);
             const body = {
               username: username,
               password: password,
               email: email,
-              phone_number: phoneNumber,
+              phone: phoneNumber,
               gender: gender,
+              age : age,
             };
             console.log(body);
             
 
-            const response: any = (await fetch(`http://localhost:8080/api/create/user`, {
+            const response: any = await (await fetch(`http://localhost:8080/api/create/user`, {
               method: "POST",
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(body)
             })).json();
-            console.log(response);
             
-            if (response.status === 200) {
+            if (response.ok === true) {
               localStorage.setItem('sid', response.sid)
               setNotification({
                 display : true,
