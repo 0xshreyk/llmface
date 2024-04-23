@@ -34,7 +34,12 @@ app.get('/api/health', (req: Request, res: Response, next: NextFunction) => {
 
 app.post('/api/create/user', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { username, password, email, phone, age, gender } = req.body;
+        const username : string = req.body.username.toString();
+        const password : string = req.body.password.toString();
+        const email : string = req.body.email.toString();
+        const phone : number = req.body.phone;
+        const age : number = req.body.age;
+        const gender : string = req.body.gender.toString();
         const existingUser: any = await Users.findOne({ 'creds.username': username });
         console.log(username);
         
