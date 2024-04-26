@@ -1,11 +1,33 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import llmface from '../public/llmface-logo.png'
 import Link from "next/link";
 function HomeComponent() {
   return (
     <>
-    Home Page, Welcome.
+      <nav className="bg-white flex px-2 border-b">
+        <div className="w-full flex p-3">
+          {/* Use that llmface image as a logo here */}
+          <Image
+            src={llmface}
+            alt="LLMFace Logo"
+            width={100} // Set the desired width
+            height={100} // Set the desired height
+          />
+        </div>
+        <div className="w-full flex justify-end p-6">
+          <button type="button" className="bg-black text-white px-4 py-2 border active:bg-red-600" onClick={(e : any)=> {
+            e.target.disabled = true;
+            console.log(localStorage.getItem("sid"));
+            localStorage.removeItem("sid");
+            console.log(localStorage.getItem("sid"));
+            
+            location.href = "/";
+            e.target.disabled = false;
+          }}>Logout</button>
+        </div>
+      </nav>
     </>
   )
 }
@@ -27,9 +49,11 @@ function LandingComponent() {
 }
 
 export default function Home() {
+  let sid = localStorage.getItem('sid');
+
   return (
     <>
-      {localStorage.getItem('sid') ? (
+      {( sid !== null && sid !== '' && sid !== undefined) ? (
         <HomeComponent />
       ) : (
         <LandingComponent />

@@ -5,7 +5,13 @@ import mongoose from 'mongoose';
 import Sessions from './utils/sm/sessions';
 import { Users } from './utils/db/users';
 
-await mongoose.connect('mongodb://localhost:27017/llmface');
+
+try {
+    await mongoose.connect('mongodb://localhost:27017/llmface');
+} catch (err : any) {
+    console.log(`Error Connecting: ${err}`);
+    
+}
 
 const app: Application = express();
 const server: http.Server = http.createServer(app);
@@ -13,6 +19,8 @@ const server: http.Server = http.createServer(app);
 const PORT: number = Number(process.env.PORT) || 8080;
 
 const Sessions_: Sessions = new Sessions(String(process.env.CHARSET));
+
+console.log(Sessions_.charset);
 
 
 async function checkNulls(arr: Array<any>): Promise<boolean> {
@@ -47,19 +55,6 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
         const gender: string = req.body.gender.toString();
         const existingUser: any = await Users.findOne({ 'creds.username': username });
 
-
-        console.log(username);
-        console.log(password)
-        console.log(age);
-        console.log(email);
-
-        console.log(gender);
-
-
-
-        console.log(phone);
-
-
         if (existingUser) {
             res.status(400).json({
                 error: 'User already exists',
@@ -79,8 +74,15 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
                 },
             });
 
-            await user.save();
-            const session: { sid: String } | null = await Sessions_.addSession(String(username));
+            try {
+                await user.save();
+            } catch (err : any) {
+                res.status(400).json({
+                    ok : false,
+                    error : err
+                })
+            }
+            const session: { sid: String } | null = await Sessions_.addSession(username);
             if (session) {
                 res.status(200).json({
                     ok: true,
@@ -130,7 +132,9 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
             /* Login succeeded
            Now giving the s. id. 
             */
-            const addSession: any = await Sessions_.addSession(String(username));
+            const addSession: any = await Sessions_.addSession(username);
+            console.log(addSession);
+            
             res.status(200).json({
                 sid: addSession.sid,
                 ok: true,
@@ -140,7 +144,7 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
              * Login failed
              * return nothing
              */
-            res.status(400).json({
+            res.status(200).json({
                 ok: false,
                 error: 'Incorrect username or password',
             })
