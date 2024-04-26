@@ -5,7 +5,13 @@ import mongoose from 'mongoose';
 import Sessions from './utils/sm/sessions';
 import { Users } from './utils/db/users';
 
-await mongoose.connect('mongodb://localhost:27017/llmface');
+
+try {
+    await mongoose.connect('mongodb://localhost:27017/llmface');
+} catch (err : any) {
+    console.log(`Error Connecting: ${err}`);
+    
+}
 
 const app: Application = express();
 const server: http.Server = http.createServer(app);
@@ -79,7 +85,14 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
                 },
             });
 
-            await user.save();
+            try {
+                await user.save();
+            } catch (err : any) {
+                res.status(400).json({
+                    ok : false,
+                    error : err
+                })
+            }
             const session: { sid: String } | null = await Sessions_.addSession(String(username));
             if (session) {
                 res.status(200).json({

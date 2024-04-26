@@ -1,11 +1,13 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 function HomeComponent() {
   return (
     <>
-    Home Page, Welcome.
+      Home Page, Welcome.
+      <span>{`> `} {localStorage.getItem('sid')}
+      </span>
     </>
   )
 }
@@ -27,9 +29,18 @@ function LandingComponent() {
 }
 
 export default function Home() {
+  const [sid, setSid] = useState<string | null>("");
+  useEffect(() => {
+
+    setSid(localStorage.getItem('sid'));
+
+    return () => {
+    }
+  }, [])
+
   return (
     <>
-      {localStorage.getItem('sid') ? (
+      {(sid === (null || '' || undefined)) ? (
         <HomeComponent />
       ) : (
         <LandingComponent />
