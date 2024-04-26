@@ -16,13 +16,6 @@ const Page = () => {
   })
 
 
-  useEffect(() => {
-
-
-    return () => {
-    }
-  }, [])
-
   return (
     <>
       <div className="text-center space-y-1 p-2">

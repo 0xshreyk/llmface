@@ -31,6 +31,6 @@ export default class Sessions {
         for (let i = 0; i < 10; i++) {
             id += this.charset[Math.floor(Math.random() * this.charset.length)];
         }
-        return ''
+        return id;
     }
 }
