@@ -3,7 +3,16 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import llmface from '../public/llmface-logo.png'
 import Link from "next/link";
+import RestofHomePage from "./HomePage";
 function HomeComponent() {
+  useEffect(() => {
+    
+    document.title = "Home";
+  
+    return () => {
+    }
+  }, [])
+  
   return (
     <>
       <nav className="bg-white flex px-2 border-b">
@@ -12,6 +21,7 @@ function HomeComponent() {
           <Image
             src={llmface}
             alt="LLMFace Logo"
+            className="p-2"
             width={100} // Set the desired width
             height={100} // Set the desired height
           />
@@ -26,8 +36,10 @@ function HomeComponent() {
             location.href = "/";
             e.target.disabled = false;
           }}>Logout</button>
+          <Link href={'/account'} className="p-4 text-blue-600 hover:underline">Your Account</Link>
         </div>
       </nav>
+      <RestofHomePage />
     </>
   )
 }
@@ -35,12 +47,12 @@ function LandingComponent() {
   return (
     <>
       <div className="h-screen w-screen flex items-center justify-center">
-        <div className="">
+        <div className="px-4 py-2 border">
           <Link href={`/i/flow/login`}>
-            <button type="button" className="px-4 py-2 border border-gray-400 font-bold rounded-md active:bg-gray-400">Login</button>
-          </Link>
+            <button type="button" className="px-4 w-full py-2 border border-gray-400 font-bold rounded-md active:bg-gray-400">Login</button>
+          </Link><br />
           <Link href={`/i/flow/signup`}>
-            <button type="button" className="px-4 py-2 border border-gray-400 font-bold rounded-md active:bg-gray-400">Signup</button>
+            <button type="button" className="px-4 w-full py-2 border border-gray-400 font-bold rounded-md active:bg-gray-400">Signup</button>
           </Link>
         </div>
       </div>
