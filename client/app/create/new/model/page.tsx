@@ -121,15 +121,12 @@ const Page: React.FC = () => {
                                     body: body
                                 })
                                 const rjson = await response.json();
-                                console.log(rjson);
-
-                                // Correction: Fix variable declaration
-                                setTimeout(() => {
-                                    e.target.disabled = false;
-                                    if (archive_btn.current) {
-                                        archive_btn.current.disabled = false;
-                                    }
-                                }, 2000);
+                                if (response.status === 200 && rjson.ok) {
+                                    alert("Done")
+                                    alert(rjson.model_id)
+                                } else {                                    
+                                    alert("Error")
+                                }
 
                             }}>Publish</button>
                         </div>

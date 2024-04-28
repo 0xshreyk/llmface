@@ -214,6 +214,7 @@ app.post('/api/create/model', async (req: Request, res: Response, next: NextFunc
         })
         try {
             await model.save()
+            
             res.status(200).json({
                 ok: true,
                 model_id: model.model_id,
