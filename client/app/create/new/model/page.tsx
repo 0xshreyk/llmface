@@ -64,8 +64,8 @@ const Page: React.FC = () => {
                         </div>
                         <div className="deploy p-2"></div>
                         <div className="publish p-2 w-full flex justify-end">
-                            <button type="button" className='text-sm border px-4 py-2 bg-green-600 text-white'>Archive</button>
-                            <button type="button" className='text-sm border px-4 py-2 bg-blue-600 text-white '>Publish</button>
+                            <button type="button" className='text-sm border px-4 py-2 bg-green-600 text-white active:bg-green-800 outline-none'>Archive</button>
+                            <button type="button" className='text-sm border px-4 py-2 bg-blue-600 text-white active:bg-blue-800 outline-none'>Publish</button>
                         </div>
                     </div>
                 </div>
