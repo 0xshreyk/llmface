@@ -7,6 +7,12 @@ const RestofHomePage: React.FC = () => {
             modelId: "supposeModelId",
             created: "2015-4-3",
             owner: "You",
+        },
+        {
+            modelName: "Max Verstappen",
+            modelId: "XYFG-12",
+            created: "2015-10-30",
+            owner: "You",
         }
     ])
     useEffect(() => {
