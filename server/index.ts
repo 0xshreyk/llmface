@@ -4,7 +4,7 @@ import cors from "cors";
 import mongoose from 'mongoose';
 import Sessions from './utils/sm/sessions';
 import { Users } from './utils/db/users';
-
+import { Models } from './utils/db/models';
 
 try {
     await mongoose.connect('mongodb://localhost:27017/llmface');
@@ -38,7 +38,7 @@ app.use(cors({
     origin: "*",
 }))
 
-app.get('/api/health', (req: Request, res: Response, next: NextFunction) => {
+app.get('/api/health', async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.status(200).json({
             health: 'ok'
@@ -60,6 +60,7 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
 
         if (existingUser) {
             res.status(400).json({
+                ok : false,
                 error: 'User already exists',
             });
         } else {
@@ -153,6 +154,20 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
         }
     } catch (Exception: any) {
         throw new Error(`/problem ${Exception}`)
+    }
+})
+
+app.get('/api/users/:username', async (req: Request, res: Response, next: NextFunction) => {
+    const username = req.params.username;
+    const user = await Users.findOne({ 'creds.username': username });
+    
+    if (user) {
+        res.status(200).json({
+            ok: true,
+            data: {
+                username : user.creds.username,
+            },
+        })
     }
 })
 
