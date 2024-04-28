@@ -23,7 +23,9 @@ export default class Sessions {
             return false;
         }
     }
-    async getSession(id: string): Promise<{username : string} | null> {
+    async getSession(id: string): Promise<{username : string} | null> {        
+        
+        
         return this.cache[id] || null;
     }
     private async generate_id(): Promise<string> {

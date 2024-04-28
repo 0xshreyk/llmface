@@ -19,7 +19,7 @@ const server: http.Server = http.createServer(app);
 const PORT: number = Number(process.env.PORT) || 8080;
 
 /**
- * 
+ *
  * Imported classes
  */
 const Sessions_: Sessions = new Sessions(String(process.env.CHARSET));
@@ -32,6 +32,25 @@ async function checkNulls(arr: Array<any>): Promise<boolean> {
     });
     return true;
 }
+async function checkModelStandards(model_description : string, model_icon_url : string, model_source : string, isLocalhost : boolean) : Promise<boolean> {
+    if (model_description.length > 1000 || model_description.length < 100) {
+        return false
+    } else {
+        return true
+    }
+}
+const generate_id = async () => {
+    // Character set to choose from
+    const chars = String(process.env.CHARSET);
+    let result = '';
+    for (let i = 0; i < 20; i++) {
+        // Get a random index from the character set
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        // Append the random character to the result
+        result += chars[randomIndex];
+    }
+    return result;
+};
 
 app.use(express.json());
 app.use(cors({
@@ -60,7 +79,7 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
 
         if (existingUser) {
             res.status(400).json({
-                ok : false,
+                ok: false,
                 error: 'User already exists',
             });
         } else {
@@ -134,7 +153,7 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
         })
         if (user) {
             /* Login succeeded
-           Now giving the s. id. 
+           Now giving the s. id.
             */
             const addSession: any = await Sessions_.addSession(username);
 
@@ -159,18 +178,59 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
 
 app.get('/api/users/:username', async (req: Request, res: Response, next: NextFunction) => {
     const username = req.params.username;
-    const user = await Users.findOne({ 'creds.username': username });
-    
+    const user: | null = await Users.findOne({ 'creds.username': username });
+
     if (user) {
         res.status(200).json({
             ok: true,
             data: {
-                username : user.creds.username,
+                username: user.creds.username,
             },
         })
     }
 })
 
+app.post('/api/create/model', async (req: Request, res: Response, next: NextFunction) => {
+    const body: typeof req.body = req.body;
+    const model_name = body.model_name;
+    const model_description = body.model_description;
+    const model_icon_url = body.model_icon_url;
+    const model_source = body.model_source;
+    const model_tags = body.model_tags;
+    const isLocalhost = body.isLocalhost;
+    const model_owner = (await Sessions_.getSession(body.owner_sid));
+
+
+    if (await checkNulls([model_owner, model_description, model_icon_url, model_name, model_source, model_tags, isLocalhost]) && await checkModelStandards(model_description, model_icon_url, model_source, isLocalhost)) {
+        const model = new Models({
+            model_name: model_name,
+            model_id : await generate_id(),
+            model_description: model_description,
+            model_icon_url: model_icon_url,
+            model_source: model_source,
+            model_tags: model_tags,
+            model_owner: model_owner,
+            isLocalhost: isLocalhost,
+        })
+        try {
+            await model.save()
+            res.status(200).json({
+                ok: true,
+                model_id: model.model_id,
+            })
+        } catch (err : any) {
+            res.status(200).json({
+                ok: false,
+                error: err
+            })
+        }
+    }
+
+    res.json({
+        lol: 'lol'
+    })
+
+})
 server.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
 })

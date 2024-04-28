@@ -7,7 +7,7 @@ const Page: React.FC = () => {
     const model_icon_url_ref = useRef<HTMLInputElement>(null)
     const model_source_ref = useRef<HTMLInputElement>(null)
     const method_selector_ref = useRef<HTMLSelectElement>(null)
-
+    const model_tags_ref = useRef<HTMLInputElement>(null)
 
 
     const archive_btn = useRef<HTMLButtonElement>(null);
@@ -26,10 +26,12 @@ const Page: React.FC = () => {
             model_description: model_description_ref.current ? model_description_ref.current.value : null,
             model_icon_url: model_icon_url_ref.current ? model_icon_url_ref.current.value : null,
             model_source: model_source_ref.current ? model_source_ref.current.value : null,
+            model_tags: model_tags_ref.current ? model_tags_ref.current.value : null,
             isLocalhost: model_source_ref.current
                 ? await checkLocalhost(model_source_ref.current.value) // Await and expect boolean
                 : null,
             method_selector: method_selector_ref.current ? method_selector_ref.current.value : null,
+            owner_sid: (localStorage.getItem('sid') ? localStorage.getItem("sid") : null),
         };
 
         return body;
@@ -76,6 +78,12 @@ const Page: React.FC = () => {
                                     <input type="text" name="model_image_url" id="model_image_url" ref={model_icon_url_ref} className='px-4 py-2 w-full rounded-xl focus:border-blue-600 font-bold border-4 outline-none text-sm' />
                                 </div>
                             </div>
+                            <div className="p-3">
+                                <h2 className='text-sm font-bold text-gray-600 px-2'>Model Tags <span className='text-gray-400'>{'(seperate using spaces)'}</span></h2>
+                                <div className="space-x-0 flex">
+                                    <input type="text" name="model_tags" id="model_tags" ref={model_tags_ref} className='px-4 py-2 w-full rounded-xl focus:border-blue-600 font-bold border-4 outline-none text-sm' />
+                                </div>
+                            </div>
 
                         </div>
 
@@ -103,10 +111,25 @@ const Page: React.FC = () => {
                                     archive_btn.current.disabled = true;
                                 }
 
-                                const body = await createBody();
+                                const body = JSON.stringify(await createBody());
 
-                                console.log(body);
+                                const response = await fetch('http://localhost:8080/api/create/model', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: body
+                                })
+                                const rjson = await response.json();
+                                console.log(rjson);
 
+                                // Correction: Fix variable declaration
+                                setTimeout(() => {
+                                    e.target.disabled = false;
+                                    if (archive_btn.current) {
+                                        archive_btn.current.disabled = false;
+                                    }
+                                }, 2000);
 
                             }}>Publish</button>
                         </div>

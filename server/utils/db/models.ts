@@ -2,12 +2,14 @@ import mongoose, { Schema } from "mongoose"
 
 
 const ModelSchema: Schema = new mongoose.Schema({
-    name : {type: String, required : true},
-    owner : {type: String, required : true},
-    tags : {type: String, required : true},
-    description : {type: String, required : true},
-    icon : {type: String, required : true},
-    source : {type: String, required : true},    
+    model_name : {type: String, required : true},
+    model_id : {type: String, required : true},
+    model_owner : {type: String, required : true},
+    model_tags : {type: String, required : true},
+    model_description : {type: String, required : true},
+    model_icon_url : {type: String, required : true},
+    method_selector : {type: String, required : false},
+    model_source : {type: String, required : true},    
     isLocalhost : {type: Boolean, required : true},
 });
 
