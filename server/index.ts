@@ -8,9 +8,9 @@ import { Users } from './utils/db/users';
 
 try {
     await mongoose.connect('mongodb://localhost:27017/llmface');
-} catch (err : any) {
+} catch (err: any) {
     console.log(`Error Connecting: ${err}`);
-    
+
 }
 
 const app: Application = express();
@@ -18,9 +18,12 @@ const server: http.Server = http.createServer(app);
 
 const PORT: number = Number(process.env.PORT) || 8080;
 
+/**
+ * 
+ * Imported classes
+ */
 const Sessions_: Sessions = new Sessions(String(process.env.CHARSET));
 
-console.log(Sessions_.charset);
 
 
 async function checkNulls(arr: Array<any>): Promise<boolean> {
@@ -76,10 +79,10 @@ app.post('/api/create/user', async (req: Request, res: Response, next: NextFunct
 
             try {
                 await user.save();
-            } catch (err : any) {
+            } catch (err: any) {
                 res.status(400).json({
-                    ok : false,
-                    error : err
+                    ok: false,
+                    error: err
                 })
             }
             const session: { sid: String } | null = await Sessions_.addSession(username);
@@ -133,8 +136,7 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
            Now giving the s. id. 
             */
             const addSession: any = await Sessions_.addSession(username);
-            console.log(addSession);
-            
+
             res.status(200).json({
                 sid: addSession.sid,
                 ok: true,
