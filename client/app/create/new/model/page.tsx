@@ -13,6 +13,27 @@ const Page: React.FC = () => {
     const archive_btn = useRef<HTMLButtonElement>(null);
 
     const publish_btn = useRef<HTMLButtonElement>(null);
+    const checkLocalhost = async (url: string): Promise<boolean> => {
+        if (url.trim().startsWith('http://localhost') || url.trim().startsWith("http://127.0.0.1")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    const createBody = async () => {
+        const body: Record<string, string | boolean | null> = {
+            model_name: model_name_ref.current ? model_name_ref.current.value : null,
+            model_description: model_description_ref.current ? model_description_ref.current.value : null,
+            model_icon_url: model_icon_url_ref.current ? model_icon_url_ref.current.value : null,
+            model_source: model_source_ref.current ? model_source_ref.current.value : null,
+            isLocalhost: model_source_ref.current
+                ? await checkLocalhost(model_source_ref.current.value) // Await and expect boolean
+                : null,
+            method_selector: method_selector_ref.current ? method_selector_ref.current.value : null,
+        };
+
+        return body;
+    };
     useEffect(() => {
         document.title = "Create New Model";
         document.body.style.backgroundColor = "whitesmoke"
@@ -76,11 +97,16 @@ const Page: React.FC = () => {
                         <div className="deploy p-2"></div>
                         <div className="publish p-2 w-full flex justify-end">
                             <button type="button" ref={archive_btn} id='archive_btn' className='text-sm border px-4 py-2 disabled:opacity-70 bg-green-600 text-white active:bg-green-800 outline-none'>Archive</button>
-                            <button type="button" ref={publish_btn} className='text-sm border px-4 py-2 disabled:opacity-70 bg-blue-600 text-white active:bg-blue-800 outline-none' onClick={(e: any) => {
+                            <button type="button" ref={publish_btn} className='text-sm border px-4 py-2 disabled:opacity-70 bg-blue-600 text-white active:bg-blue-800 outline-none' onClick={async (e: any) => {
                                 e.target.disabled = true;
                                 if (archive_btn.current) {
                                     archive_btn.current.disabled = true;
                                 }
+
+                                const body = await createBody();
+
+                                console.log(body);
+
 
                             }}>Publish</button>
                         </div>
