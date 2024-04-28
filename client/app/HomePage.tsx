@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 const RestofHomePage: React.FC = () => {
@@ -28,7 +29,10 @@ const RestofHomePage: React.FC = () => {
             <div className="items-center flex justify-center w-screen h-full">
                 <div className="w-[100%] max-w-[700px] border-l border-r h-full">
                     <div className="text-center p-2">
-                        <button type="button" className='px-4 py-2 border rounded-xl bg-gray-700 text-white w-3/4 text-sm font-bold active:bg-gray-600'>Create New</button>
+                        <Link href={'/create/new/model'}>
+                            <button type="button" className='px-4 py-2 border rounded-xl bg-gray-700 text-white w-3/4 text-sm font-bold active:bg-gray-600'>Create New</button>
+
+                        </Link>
                         <button type="button" className='px-4 py-2 border rounded-xl bg-green-700 text-white w-3/4 text-sm font-bold active:bg-green-600'>View Analytics</button>
                         <button type="button" className='px-4 py-2 border rounded-xl bg-blue-700 text-white w-3/4 text-sm font-bold active:bg-blue-600'>View Permissions</button>
                     </div>
