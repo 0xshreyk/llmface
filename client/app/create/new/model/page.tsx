@@ -1,6 +1,32 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+
+interface alert_interface {
+    text: string,
+    onOkClick: any,
+}
+const Alerting: React.FC<alert_interface> = ({ text, onOkClick }) => {
+    const handleOkClick = () => {
+        // Call the onOkClick prop when the "OK" button is clicked
+        if (onOkClick) {
+            onOkClick(); // Invoke the callback
+        }
+    };
+
+    return (
+        <div className="fixed top-0 left-0 w-full h-full bg-[transparent] bg-opacity-50 backdrop-blur-xl z-[70] flex items-center justify-center">
+            <div className="text-center bg-gray-100 border rounded-xl overflow-hidden scale-[1.3]">
+                <div className="p-8">
+                    <span className="font-bold">{text}</span>
+                </div>
+                <button type="button" className="w-full px-4 py-2 border-t text-blue-600 active:bg-gray-300" onClick={handleOkClick}>
+                    OK
+                </button>
+            </div>
+        </div>
+    );
+};
 const Page: React.FC = () => {
     const model_name_ref = useRef<HTMLInputElement>(null)
     const model_description_ref = useRef<HTMLTextAreaElement>(null)
@@ -36,6 +62,15 @@ const Page: React.FC = () => {
 
         return body;
     };
+
+    const show_alert: any = async (text: string, xfunction: any) => {
+        setIsAlert(true)
+        setAlertText(text)
+        setAlertFunction(xfunction)
+    }
+    const [isAlert, setIsAlert] = useState(false)
+    const [alertText, setAlertText] = useState('')
+    const [alertFunction, setAlertFunction] = useState(() => {})
     useEffect(() => {
         document.title = "Create New Model";
         document.body.style.backgroundColor = "whitesmoke"
@@ -55,10 +90,12 @@ const Page: React.FC = () => {
                             </span>
 
                         </Link>
-                        <h1 className='text-sm font-bold py-2'>Create New Model</h1>
+                        <h1 className='text-sm font-bold py-2 z-[30]'>Create New Model</h1>
                     </div>
                     <div className="overflow-y-auto max-h-full min-h-[max-content] no-scrollbar pt-16">
                         <div className="general p-2">
+
+
                             <h1 className='text-xl font-bold'>General</h1>
                             <div className="p-3">
                                 <h2 className='text-sm font-bold text-gray-600 px-2'>Model Name</h2>
@@ -122,12 +159,13 @@ const Page: React.FC = () => {
                                 })
                                 const rjson = await response.json();
                                 if (response.status === 200 && rjson.ok) {
-                                    alert("Done")
+                                    console.warn('Model added Successfully (MaS)')
+                                    alert('Done')
+                                    setTimeout(() => {
+                                        location.href= '/'
+                                    }, 1000);
+                                } else {
                                     console.log(rjson);
-                                    alert(rjson.model_id)
-                                } else {                                    
-                                    console.log(rjson);
-                                    
                                 }
 
                                 /**
@@ -135,7 +173,9 @@ const Page: React.FC = () => {
                                  * This part should only run if operation is successful
                                  * kept now for testing purposes
                                  */
-                                e.target.disabled = false;
+
+                                e.target.disabled = false;                                        location.href= '/'
+
                                 if (archive_btn.current) {
                                     archive_btn.current.disabled = false;
                                 }
@@ -145,6 +185,7 @@ const Page: React.FC = () => {
                     </div>
                 </div>
             </div>
+
         </>
     )
 }
