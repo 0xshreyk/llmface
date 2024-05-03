@@ -227,10 +227,6 @@ app.post('/api/create/model', async (req: Request, res: Response, next: NextFunc
         }
     }
 
-    res.json({
-        lol: 'lol'
-    })
-
 })
 server.listen(PORT, () => {
     console.log(`listening on ${PORT}`);

@@ -4,9 +4,6 @@ const client = new Redis();
 // Handle Redis connection errors
 client.on('error', (err) => console.error('Redis Client Error:', err));
 
-// Ensure connection to Redis
-await client.connect();
-
 export default class Sessions {
     charset: string;
 
@@ -15,7 +12,7 @@ export default class Sessions {
     }
 
     // Generate a random session ID
-    private generateId(): string {
+    private async generateId(): Promise<string> {
         let id = '';
         for (let i = 0; i < 10; i++) {
             id += this.charset[Math.floor(Math.random() * this.charset.length)];
@@ -26,7 +23,7 @@ export default class Sessions {
     // Add a new session
     public async addSession(username: string): Promise<{ sid: string }> {
         try {
-            const sessionId = this.generateId();
+            const sessionId = await this.generateId();
             await client.hset(sessionId, { username }); // Use hset to set hash field
             return { sid: sessionId };
         } catch (e: any) {
