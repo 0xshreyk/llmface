@@ -123,9 +123,21 @@ const Page: React.FC = () => {
                                 const rjson = await response.json();
                                 if (response.status === 200 && rjson.ok) {
                                     alert("Done")
+                                    console.log(rjson);
                                     alert(rjson.model_id)
                                 } else {                                    
-                                    alert(rjson.err)
+                                    console.log(rjson);
+                                    
+                                }
+
+                                /**
+                                 * 
+                                 * This part should only run if operation is successful
+                                 * kept now for testing purposes
+                                 */
+                                e.target.disabled = false;
+                                if (archive_btn.current) {
+                                    archive_btn.current.disabled = false;
                                 }
 
                             }}>Publish</button>

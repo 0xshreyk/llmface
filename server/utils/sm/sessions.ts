@@ -44,11 +44,11 @@ export default class Sessions {
     }
 
     // Get a session by its ID
-    public async getSession(id: string): Promise<{ username: string } | null> {
+    public async getSession(id: string): Promise<string | null> {
         try {
             const username = await client.hget(id, 'username'); // Retrieve the username from the hash
-            if (username) {
-                return { username }; // Return the found username
+            if (username) {                
+                return username; // Return the found username
             } else {
                 return null; // If no username is found
             }

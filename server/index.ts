@@ -198,8 +198,12 @@ app.post('/api/create/model', async (req: Request, res: Response, next: NextFunc
     const model_source = body.model_source;
     const model_tags = body.model_tags;
     const isLocalhost = body.isLocalhost;
+    console.log('This is '+body.owner_sid);
+    
     const model_owner = (await Sessions_.getSession(body.owner_sid));
 
+    console.log('Owner : '+model_owner);
+    
 
     if (await checkNulls([model_owner, model_description, model_icon_url, model_name, model_source, model_tags, isLocalhost]) && await checkModelStandards(model_description, model_icon_url, model_source, isLocalhost)) {
         const model = new Models({
