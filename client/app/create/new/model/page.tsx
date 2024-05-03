@@ -70,7 +70,7 @@ const Page: React.FC = () => {
     }
     const [isAlert, setIsAlert] = useState(false)
     const [alertText, setAlertText] = useState('')
-    const [alertFunction, setAlertFunction] = useState(() => {})
+    const [alertFunction, setAlertFunction] = useState(() => { })
     useEffect(() => {
         document.title = "Create New Model";
         document.body.style.backgroundColor = "whitesmoke"
@@ -162,7 +162,7 @@ const Page: React.FC = () => {
                                     console.warn('Model added Successfully (MaS)')
                                     alert('Done')
                                     setTimeout(() => {
-                                        location.href= '/'
+                                        location.href = '/'
                                     }, 1000);
                                 } else {
                                     console.log(rjson);
@@ -174,7 +174,7 @@ const Page: React.FC = () => {
                                  * kept now for testing purposes
                                  */
 
-                                e.target.disabled = false;                                        location.href= '/'
+                                e.target.disabled = false; location.href = '/'
 
                                 if (archive_btn.current) {
                                     archive_btn.current.disabled = false;
