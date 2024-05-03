@@ -1,8 +1,8 @@
 import Redis from 'ioredis';
-const client = new Redis();
+const client : any = new Redis();
 
 // Handle Redis connection errors
-client.on('error', (err) => console.error('Redis Client Error:', err));
+client.on('error', (err : any) => console.error('Redis Client Error:', err));
 
 export default class Sessions {
     charset: string;

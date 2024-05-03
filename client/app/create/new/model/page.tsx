@@ -125,7 +125,7 @@ const Page: React.FC = () => {
                                     alert("Done")
                                     alert(rjson.model_id)
                                 } else {                                    
-                                    alert("Error")
+                                    alert(rjson.err)
                                 }
 
                             }}>Publish</button>
