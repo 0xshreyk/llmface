@@ -238,7 +238,7 @@ app.get('/api/get/models/:ssid', async (req: Request, res: Response) => {
     if (req.method === 'GET') {
         const model_owner : string | null = (await Sessions_.getSession(req.params.ssid));
         if (model_owner) {
-            const models : any = await Models.find({ model_owner: model_owner });
+            const models : any = await Models.find({ model_owner: model_owner }).select('model_name createdAt model_owner model_id isLocalhost model_tags');
             res.status(200).json({
                 ok: true,
                 models: models,

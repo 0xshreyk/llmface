@@ -5,26 +5,27 @@ import React, { useEffect, useState } from 'react'
 
 
 const RestofHomePage: React.FC = () => {
-    const [cacheModels, setCacheModels] = useState([
-        {
-            modelName: "Vereion",
-            modelId: "supposeModelId",
-            created: "2015-4-3",
-            owner: "You",
-        },
-        {
-            modelName: "Max Verstappen",
-            modelId: "XYFG-12",
-            created: "2015-10-30",
-            owner: "You",
-        }
-    ])
+    type Model = {
+        model_name: string;
+        model_id: string;
+        createdAt: string;
+        model_owner: string;
+    };
+    const [cacheModels, setCacheModels] = useState<Model[]>([]);
     useEffect(() => {
-        
+        fetch(`http://localhost:8080/api/get/models/${localStorage.getItem('sid')}`)
+            .then(response => response.json())
+            .then((data) => {
+                if (Array.isArray(data.models)) {
+                    setCacheModels((prevModels) => [...prevModels, ...data.models]); // Ensure it's flat
+                } else {
+                    console.error('Expected data.models to be an array, but got:', typeof data.models);
+                }
+
+            });
         return () => {
         }
     }, [])
-    'use client'
 
     return (
         <>
@@ -52,10 +53,10 @@ const RestofHomePage: React.FC = () => {
                             </tr>
                             {
                                 cacheModels.map((element, index) => {
-                                    return (<tr className='p-2 hover:bg-gray-300 cursor-pointer overflow-hidden' key={index}>
-                                        <td className='px-4 py-2 text-sm text-blue-600 font-bold cursor-pointer hover:underline'>{element.modelName}</td>
-                                        <td className='px-4 py-2 text-sm text-gray-700'>{element.created}</td>
-                                        <td className='px-4 py-2 text-sm text-blue-600 hover:underline font-bold'>{element.owner}</td>
+                                    return (<tr className='p-2 hover:bg-gray-300 cursor-pointer overflow-hidden' key={element.model_id}>
+                                        <td className='px-4 py-2 text-sm text-blue-600 font-bold cursor-pointer hover:underline'>{element.model_name}</td>
+                                        <td className='px-4 py-2 text-sm text-gray-700'>{element.createdAt}</td>
+                                        <td className='px-4 py-2 text-sm text-blue-600 hover:underline font-bold'>{element.model_owner}</td>
                                         <td className='px-4 py-2 text-sm flex space-x-2'>
                                             <button type="button" className='text-sm border border-gray-100 px-4 py-2 rounded-lg hover:bg-red-600 duration-200 hover:text-white flex'><span className="material-symbols-outlined">
                                                 delete
