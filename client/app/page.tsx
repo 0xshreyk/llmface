@@ -7,7 +7,7 @@ import NextNProgress from 'nextjs-progressbar';
 
 import RestofHomePage from "./HomePage";
 
-function Footer() : ReactElement {
+function Footer(): ReactElement {
   return (<div className="fixed bottom-0 left-0 w-screen px-4 py-2 bg-gray-100 flex items-center justify-center">
     <span className="text-sm text-gray-800">Copyrighted under @LLMFace</span>
   </div>)

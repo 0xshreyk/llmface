@@ -32,7 +32,7 @@ async function checkNulls(arr: Array<any>): Promise<boolean> {
     });
     return true;
 }
-async function checkModelStandards(model_description : string, model_icon_url : string, model_source : string, isLocalhost : boolean) : Promise<boolean> {
+async function checkModelStandards(model_description: string, model_icon_url: string, model_source: string, isLocalhost: boolean): Promise<boolean> {
     if (model_description.length > 1000 || model_description.length < 100) {
         return false
     } else {
@@ -177,7 +177,7 @@ app.post('/api/check/user', async (req: Request, res: Response, next: NextFuncti
 })
 
 app.get('/api/users/:username', async (req: Request, res: Response, next: NextFunction) => {
-    const username = req.params.username;
+    const username : string = req.params.username;
     const user: | null = await Users.findOne({ 'creds.username': username });
 
     if (user) {
@@ -192,23 +192,23 @@ app.get('/api/users/:username', async (req: Request, res: Response, next: NextFu
 
 app.post('/api/create/model', async (req: Request, res: Response, next: NextFunction) => {
     const body: typeof req.body = req.body;
-    const model_name = body.model_name;
-    const model_description = body.model_description;
-    const model_icon_url = body.model_icon_url;
-    const model_source = body.model_source;
-    const model_tags = body.model_tags;
-    const isLocalhost = body.isLocalhost;
-    console.log('This is '+body.owner_sid);
-    
-    const model_owner = (await Sessions_.getSession(body.owner_sid));
+    const model_name : string = body.model_name;
+    const model_description : string = body.model_description;
+    const model_icon_url : string = body.model_icon_url;
+    const model_source : string = body.model_source;
+    const model_tags : string = body.model_tags;
+    const isLocalhost : boolean = body.isLocalhost;
+    console.log('This is ' + body.owner_sid);
 
-    console.log('Owner : '+model_owner);
-    
+    const model_owner : string | null = (await Sessions_.getSession(body.owner_sid));
+
+    console.log('Owner : ' + model_owner);
+
 
     if (await checkNulls([model_owner, model_description, model_icon_url, model_name, model_source, model_tags, isLocalhost]) && await checkModelStandards(model_description, model_icon_url, model_source, isLocalhost)) {
-        const model = new Models({
+        const model : any = new Models({
             model_name: model_name,
-            model_id : await generate_id(),
+            model_id: await generate_id(),
             model_description: model_description,
             model_icon_url: model_icon_url,
             model_source: model_source,
@@ -218,17 +218,43 @@ app.post('/api/create/model', async (req: Request, res: Response, next: NextFunc
         })
         try {
             await model.save()
-            
+
             res.status(200).json({
                 ok: true,
                 model_id: model.model_id,
             })
-        } catch (err : any) {
+        } catch (err: any) {
             res.status(200).json({
                 ok: false,
                 error: err
             })
         }
+    }
+
+})
+
+app.get('/api/get/models/:ssid', async (req: Request, res: Response) => {
+
+    if (req.method === 'GET') {
+        const model_owner : string | null = (await Sessions_.getSession(req.params.ssid));
+        if (model_owner) {
+            const models : any = await Models.find({ model_owner: model_owner });
+            res.status(200).json({
+                ok: true,
+                models: models,
+            })
+        } else {
+            res.status(200).json({
+                ok : false,
+                models : "",
+                problem : "No such user found."
+            })
+        }
+    } else {
+        res.status(400).json({
+            ok : false,
+            error : `Invalid request method`
+        })
     }
 
 })

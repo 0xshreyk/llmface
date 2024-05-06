@@ -1,5 +1,8 @@
+'use client'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+
+
 
 const RestofHomePage: React.FC = () => {
     const [cacheModels, setCacheModels] = useState([
@@ -17,11 +20,11 @@ const RestofHomePage: React.FC = () => {
         }
     ])
     useEffect(() => {
-
-
+        
         return () => {
         }
     }, [])
+    'use client'
 
     return (
         <>
