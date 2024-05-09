@@ -1,1 +1,1 @@
-# Deploy your Large language Models without worrying about interface, easily.
+# Deploy your Large language Models without worrying about interface.
