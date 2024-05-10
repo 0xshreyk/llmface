@@ -58,12 +58,19 @@ const RestofHomePage: React.FC = () => {
                                         <td className='px-4 py-2 text-sm text-gray-700'>{element.createdAt}</td>
                                         <td className='px-4 py-2 text-sm text-blue-600 hover:underline font-bold roboto-bold'>{element.model_owner}</td>
                                         <td className='px-4 py-2 text-sm flex space-x-2'>
-                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg hover:bg-red-600 duration-200 hover:text-white flex'><span className="material-symbols-outlined">
-                                                delete
+                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg active:opacity-[0.7] hover:bg-blue-600 hover:text-white text-gray-700 flex'><span className="material-symbols-outlined">
+                                                chat
                                             </span></button>
-                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg hover:bg-green-600 duration-200 hover:text-white flex'><span className="material-symbols-outlined">
+                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg active:opacity-[0.7] hover:bg-purple-600 hover:text-white text-gray-700 flex'><span className="material-symbols-outlined">
+                                                info
+                                            </span></button>
+                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg active:opacity-[0.7] hover:bg-green-600 hover:text-white text-gray-700 flex'><span className="material-symbols-outlined">
                                                 edit
                                             </span></button>
+                                            <button type="button" className='text-sm border roboto-regular border-gray-100 px-4 py-2 rounded-lg active:opacity-[0.7] hover:bg-red-600 hover:text-white text-gray-700 flex'><span className="material-symbols-outlined">
+                                                delete
+                                            </span></button>
+
                                         </td>
 
                                     </tr>)
