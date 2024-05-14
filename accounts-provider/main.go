@@ -8,7 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	// "time"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -16,7 +16,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
 func main() {
 	ctx := context.Background()
 
@@ -39,6 +38,8 @@ func main() {
 			panic(err)
 		}
 	}()
+	coll := client.Database("llmface").Collection("users")
+	title := "Let's see how it goes"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/accounts/health", func(w http.ResponseWriter, r *http.Request) {
