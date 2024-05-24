@@ -8,9 +8,9 @@ import (
 	"os"
 	"time"
 
+	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"encoding/json"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -52,13 +52,13 @@ func main() {
 	/*
 	* Function taking the username (id)
 	 */
-	 r.HandleFunc("/get/account/info/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/get/account/info/{id}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id := vars["id"]
 		fmt.Print(id)
-	
+
 		filter := bson.D{{"creds.username", id}}
-	
+
 		var result bson.M
 		err := coll.FindOne(context.TODO(), filter).Decode(&result)
 		if err != nil {
@@ -68,7 +68,12 @@ func main() {
 			}
 			log.Fatal(err)
 		}
-		
+
+		// Exclude the password field
+		if creds, ok := result["creds"].(bson.M); ok {
+			delete(creds, "password")
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		response, err := json.Marshal(result)
@@ -78,6 +83,6 @@ func main() {
 		}
 		w.Write(response)
 	})
-	
+
 	http.ListenAndServe(":8000", r)
 }
