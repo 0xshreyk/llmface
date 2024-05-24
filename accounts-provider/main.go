@@ -1,9 +1,7 @@
 package main
 
 import (
-	// "bufio"
 	"context"
-	// "encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 	"encoding/json"
 
-	// "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

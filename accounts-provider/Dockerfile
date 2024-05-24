@@ -1,6 +1,14 @@
-FROM golang:1.19
+# Use a minimal base image
+FROM alpine
+
+# Set the working directory inside the container
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY *.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+
+# Copy your Go executable into the container
+COPY main .
+
+# Ensure the executable has run permissions
+RUN chmod +x main
+
+# Set the entry point to your Go executable
+ENTRYPOINT ["/app/main"]
